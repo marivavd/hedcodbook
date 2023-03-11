@@ -1,3 +1,12 @@
-from math import cbrt
+from flask import Flask, render_template
 
-print(cbrt(8))
+app = Flask(__name__)
+
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
