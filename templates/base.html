@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <a class="info" href="/info" target="_self" title="информация">
+            <img class="info" src="static/img/html/info.png" alt="информация" width="100%" border="0"></a>
+        <input class="info">
+        {% block hat%}{% endblock %}
+    </header>
+
+    <!--тело-->
+        {% block body %}{% endblock %}
+
+
+    <!--подвал-->
+        {% block basement %}{% endblock %}
+</body>
+</html>
