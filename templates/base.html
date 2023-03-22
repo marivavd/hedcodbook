@@ -23,13 +23,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-              <a href="#" class="nav-link">Account</a>
+            <a class="navbar-brand" href="/">Authors</a>
           </li>
           <li class="nav-item active">
-            <a href="#" class="nav-link">Authors</a>
-          </li>
-          <li class="nav-item active">
-            <a href="#" class="nav-link">Home</a>
+            <a class="navbar-brand" href="/">Home</a>
           </li>
         </ul>
         <div class="mx-auto">
@@ -39,7 +36,7 @@
           </form>
         </div>
       </div>
-
+      <a class="navbar-brand" href="/logout">{{ current_user.nickname }}</a>
     </nav>
 
     <!-- Optional JavaScript; choose one of the two! -->
