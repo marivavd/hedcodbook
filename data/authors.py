@@ -12,4 +12,4 @@ class Authors(SqlAlchemyBase):
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     nickname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
-    library = orm.relationship("Library", backref='authors')
+    library = orm.relationship("Library", back_populates='authors')
