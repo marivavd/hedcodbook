@@ -1,6 +1,5 @@
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
 from forms.user import RegisterForm, LoginForm
 from data.users import User
 from data import db_session

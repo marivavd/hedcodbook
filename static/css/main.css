@@ -1,4 +1,11 @@
 body{
-background-image: url(/static/img/html/fon.jpg)
+background-image: url(/static/img/html/fon.jpg);
+background-repeat: no-repeat;
+background-position: center center;
+background-attachment: fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
 }
 

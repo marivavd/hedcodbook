@@ -1,4 +1,10 @@
-{% extends "base=.html" %}
+{% extends "base.html" %}
 {% block content %}
-<h3>{{ current_user.nickname }}</h3>
+<link rel="stylesheet" type="text/css" href="/static/css/user_page.css">
+{% if current_user %}
+    <img src="/static/img/avatars/{{ current_user.avatar }}" height="200" width="200" class="round" vspace="10">
+    <h1>{{ nickname }}</h1>
+    <a type="button" class="btn btn-info btn-lg" href="/#" style="margin: 20px">Мои отзывы</a>
+    <a type="button" class="btn btn-success btn-lg" href="/#" style="margin: 20px">Мои оценки</a>
+{% endif %}
 {% endblock %}
