@@ -71,8 +71,13 @@ def index():
     if current_user.is_authenticated:
         return render_template("home.html")
     else:
-        return render_template("index.html")
+        return render_template('index.html')
 
+
+@app.route("/user_page")
+def user_page():
+    if current_user.is_authenticated:
+        return render_template("user_page.html", nickname=current_user.nickname)
 
 if __name__ == '__main__':
     main()
