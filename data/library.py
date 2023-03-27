@@ -18,4 +18,8 @@ class Library(SqlAlchemyBase):
     link_to_the_screenshot = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     summary = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
     history_of_creation = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+
+    summa_marks = sqlalchemy.Column(sqlalchemy.Integer, default=0)
+    count_marks = sqlalchemy.Column(sqlalchemy.Integer, default=0)
+    reviews = sqlalchemy.Column(sqlalchemy.JSON, default={})
     authors = orm.relationship('Authors')

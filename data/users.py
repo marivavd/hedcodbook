@@ -17,6 +17,12 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     avatar = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
+    books = sqlalchemy.Column(sqlalchemy.JSON, nullable=True, default={"reading_now": [],
+                                                                       "want_to_read": [],
+                                                                       "were_read": [],
+                                                                       "comments": {},
+                                                                       "marks": {}})
+
 
     def __repr__(self):
         return f'<User> {self.id} {self.name} {self.email}'
