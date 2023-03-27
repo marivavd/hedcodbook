@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% block title%}home{% endblock %}
 {% block content %}
-<h1>тело</h1>
+<center><h1><b><i>Popular books</i></b></h1></center>
+{% for i in range(4) %}
+    {% for y in range(6) %}
+        <a href="/book/sp_books[i * 6 + y].id"></a>
+            <img src="{{ sp_books[i * 6 + y].picture }}" style="margin: 2%" width="20%" height="20%">
+    {% endfor %}
+{% endfor %}
 {% endblock %}
