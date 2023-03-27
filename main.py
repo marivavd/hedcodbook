@@ -5,6 +5,7 @@ from data.users import User
 from data.library import Library
 from data.authors import Authors
 from data import db_session
+import random
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -45,7 +46,8 @@ def reqister():
             name=form.name.data,
             surname=form.surname.data,
             email=form.email.data,
-            nickname=form.nickname.data
+            nickname=form.nickname.data,
+            avatar=random.choice(['avatar_raccoon.jpg', 'avatar_hedgehog.jpg'])
         )
         user.set_password(form.password.data)
         db_sess.add(user)
@@ -72,7 +74,7 @@ def index():
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         books = db_sess.query(Library).filter(Library.count_marks != 0).all()
-        books.sort(key=lambda i: (i.count_marks != 0, i.summa_marks / i.count_marks))
+        books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
         return render_template("home.html", sp_books=books)
     else:
         return render_template('index.html')
@@ -83,18 +85,25 @@ def user_page():
     if current_user.is_authenticated:
         return render_template("user_page.html", nickname=current_user.nickname)
 
+
 @app.route("/add_book")
 def add_book():
     return render_template("add_book.html")
 
-@app.route("/for_you")
-def for_you():
-    return render_template("for_you.html")
-
 
 @app.route("/book/<int:id>")
 def book(id):
-    ...
+    db_sess = db_session.create_session()
+    book = db_sess.query(Library).filter(Library.id == id).first()
+    author = db_sess.query(Authors).filter(Authors.id == book.author_id).first()
+    return render_template("book.html", book=book, author=author)
+
+@app.route("/author/<int:id>")
+def author(id):
+    db_sess = db_session.create_session()
+    author = db_sess.query(Authors).filter(Authors.id == id).first()
+    return render_template("author.html", author=author)
+
 
 if __name__ == '__main__':
     main()

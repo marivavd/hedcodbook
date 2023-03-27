@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title%}{{ book.name }}{% endblock %}
+{% block content %}
+<center><h1><b><i>{{ book.name }}</i></b></h1></center>
+<a href="/author/{{ author.id }}" class="author"><center><h1><b><i>{{ author.name }} {{ author.surname }}</i></b></h1></center></a>
+{% endblock %}
