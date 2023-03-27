@@ -11,4 +11,5 @@ class Authors(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.Text, nullable=True)
+    picture = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     library = orm.relationship("Library", back_populates='authors')
