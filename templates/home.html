@@ -2,11 +2,13 @@
 {% block title%}home{% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="/static/css/home.css">
-<center><h1><b><i>Popular books</i></b></h1></center>
 <div class="container">
-  <div class="box-1"> A </div>
-  <div class="box-2"> B </div>
-  <div class="box-3"> C </div>
+  {% for i in range(24) %}
+    <div>
+        <a href="/book/{{ sp_books[i].id }}">
+            <img class="img_book" src="{{ sp_books[i].picture }}">
+        </a>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}
