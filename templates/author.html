@@ -1,4 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ author.name }} {{ author.surname }}</h1>
+<link rel="stylesheet" type="text/css" href="/static/css/author.css">
+<h1 class="name">{{ author.name }} {{ author.surname }}</h1>
+<div class="parent">
+  <img class="image1" src="/static/img/html/frame.jpg" />
+  <img class="image2" src="{{ author.picture }}" />
+</div>
+<p>Информация об авторе: {{ author.about }}</p>
 {% endblock %}
