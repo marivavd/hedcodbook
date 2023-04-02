@@ -1,0 +1,15 @@
+@font-face {
+	font-family: 'FontName bold';
+	src: url(/static/fonts/ofont.ru_Maya.ttf)}
+p { word-wrap:break-word;
+    font-family: 'FontName bold';
+	font-size: 40px;
+	color: #00008B}
+.title {word-wrap:break-word;
+    font-family: 'FontName bold';
+	font-size: 70px;
+	color: #0000FF}
+.author_name {word-wrap:break-word;
+             font-family: 'FontName bold';
+	         font-size: 70px;
+	         color: #0000FF}
