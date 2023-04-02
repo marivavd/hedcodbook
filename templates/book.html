@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block title%}{{ book.name }}{% endblock %}
 {% block content %}
-<center><h1><b><i>{{ book.name }}</i></b></h1></center>
-<a href="/author/{{ author.id }}" class="author"><center><h1><b><i>{{ author.name }} {{ author.surname }}</i></b></h1></center></a>
+<link rel="stylesheet" type="text/css" href="/static/css/book.css">
+<center><h1 class="title">{{ book.name }}</h1></center>
+<a href="/author/{{ author.id }}" class="author"><center><h1 class="author_name">{{ author.name }} {{ author.surname }}</h1></center></a>
+<p>Жанр: {{ book.genre }}</p>
+<p>Краткое содержание: {{ book.summary }}</p>
+<p>История создания: {{ book.history_of_creation }}</p>
 {% endblock %}
