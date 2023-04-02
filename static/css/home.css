@@ -11,5 +11,5 @@ body { min-height: 100%; }
     grid-template-rows: repeat(6, 1fr);
     column-gap: 2em;
     row-gap: 1em;
-    margin: auto;
+    margin-top: 60px;
 }

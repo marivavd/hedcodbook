@@ -26,4 +26,6 @@
   width: 20%;
   height: 70%;
 }
-p { word-wrap:break-word; }
+p { word-wrap:break-word;
+    font-family: 'FontName bold';
+	font-size: 40px;}
