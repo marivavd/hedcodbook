@@ -1,3 +1,4 @@
+"""Модуль для переключения между страницами"""
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
@@ -24,11 +25,6 @@ def load_user(user_id):
 def logout():
     logout_user()
     return redirect("/")
-
-
-def main():
-    db_session.global_init("db/library.db")
-    app.run()
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -91,19 +87,21 @@ def add_book():
     return render_template("add_book.html")
 
 
-@app.route("/book/<int:id>")
-def book(id):
+@app.route("/book/<int:book_id>")
+def open_book(book_id):
     db_sess = db_session.create_session()
-    book = db_sess.query(Library).filter(Library.id == id).first()
+    book = db_sess.query(Library).filter(Library.id == book_id).first()
     author = db_sess.query(Authors).filter(Authors.id == book.author_id).first()
     return render_template("book.html", book=book, author=author)
 
-@app.route("/author/<int:id>")
-def author(id):
+
+@app.route("/author/<int:author_id>")
+def open_author(author_id):
     db_sess = db_session.create_session()
-    author = db_sess.query(Authors).filter(Authors.id == id).first()
+    author = db_sess.query(Authors).filter(Authors.id == author_id).first()
     return render_template("author.html", author=author)
 
 
 if __name__ == '__main__':
-    main()
+    db_session.global_init("db/library.db")
+    app.run(port=8000)
