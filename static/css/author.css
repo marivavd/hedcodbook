@@ -1,0 +1,29 @@
+.name {
+       text-align: center;
+       font-family: 'FontName bold';
+	   font-size: 80px;
+       }
+@font-face {
+	font-family: 'FontName bold';
+	src: url(/static/fonts/ofont.ru_Banff.ttf);
+}
+.parent {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.image1 {
+  position: relative;
+  top: 0;
+  left: 35%;
+  width: 30%;
+  height: 40%;
+}
+.image2 {
+  position: absolute;
+  top: 62px;
+  left: 40%;
+  width: 20%;
+  height: 70%;
+}
+p { word-wrap:break-word; }
