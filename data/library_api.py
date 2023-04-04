@@ -7,8 +7,8 @@ from .library import Library
 blueprint = flask.Blueprint('library_api', __name__, template_folder='templates')
 
 
-@blueprint.route('/api/jobs', methods=['POST'])
-def create_jobs():
+@blueprint.route('/api/books', methods=['POST'])
+def create_book():
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in

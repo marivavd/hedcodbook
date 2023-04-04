@@ -1,0 +1,18 @@
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField
+from wtforms.fields import EmailField
+from wtforms.validators import DataRequired
+
+
+class RegisterForm(FlaskForm):
+    name = StringField('Название книги', validators=[DataRequired()])
+    i_am_author = BooleanField('Я автор', validators=[DataRequired()])
+    author = StringField('Если вы не автор, то внесите имя и фамилию автора', validators=[DataRequired()])
+    genre = StringField('Жанр', validators=[DataRequired()])
+    summary = TextAreaField('Краткое содержание', validators=[DataRequired()])
+    history_of_creation = StringField('История создания', validators=[DataRequired()])
+    link_to_the_book = StringField('Ссылка на произведение', validators=[DataRequired()])
+    link_to_the_production = StringField('Ссылка на постановку в театре', validators=[DataRequired()])
+    link_to_audio = StringField('Ссылка на аудиокнигу', validators=[DataRequired()])
+    link_to_the_screenshot = StringField('Ссылка на фильм', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
