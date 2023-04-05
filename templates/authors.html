@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title%}home{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/static/css/authors.css">
+{% for i in range(n) %}
+<div>
+   <a href="/author/{{ authors[i].id }}">
+       <img class="img_author" src="{{ authors[i].picture }}">
+   </a>
+   <p><b><i>{{ authors[i].name }} {{ authors[i].surname}}</i></b></p>
+</div>
+{% endfor %}
+{% endblock %}

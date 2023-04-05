@@ -102,6 +102,13 @@ def open_author(author_id):
     return render_template("author.html", author=author)
 
 
+@app.route("/authors")
+def open_page_with_authors():
+    db_sess = db_session.create_session()
+    authors = db_sess.query(Authors).all()
+    return render_template("authors.html", authors=authors, n=len(authors))
+
+
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
     app.run(port=8000)

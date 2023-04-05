@@ -1,15 +1,18 @@
 @font-face {
-	font-family: 'FontName bold';
+	font-family: 'FontName2';
 	src: url(/static/fonts/ofont.ru_Maya.ttf)}
+@font-face {
+	font-family: 'FontName1';
+	src: url(/static/fonts/ofont.ru_NK123.ttf)}
 p { word-wrap:break-word;
-    font-family: 'FontName bold';
+    font-family: 'FontName1';
 	font-size: 40px;
-	color: #00008B}
+	color: black}
 .title {word-wrap:break-word;
-    font-family: 'FontName bold';
+    font-family: 'FontName2';
 	font-size: 70px;
-	color: #0000FF}
+	color: MediumAquamarine}
 .author_name {word-wrap:break-word;
-             font-family: 'FontName bold';
+             font-family: 'FontName2';
 	         font-size: 70px;
-	         color: #0000FF}
+	         color: black}
