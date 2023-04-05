@@ -7,6 +7,7 @@ from data.library import Library
 from data.authors import Authors
 from data import db_session
 import random
+from data import db_session, library_api
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -111,4 +112,5 @@ def open_page_with_authors():
 
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
+    app.register_blueprint(library_api.blueprint)
     app.run(port=8000)
