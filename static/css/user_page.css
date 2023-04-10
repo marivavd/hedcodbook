@@ -1,9 +1,46 @@
+@font-face {
+	font-family: 'FontName';
+	src: url(/static/fonts/ofont.ru_NK123.ttf)}
 .round {
     border-radius: 100px; /* Радиус скругления */
     border: 3px solid green; /* Параметры рамки */
     box-shadow: 0 0 7px #666; /* Параметры тени */
     float: left
    }
-h1{
-color: #006400;
-text-indent: 300px}
+.buttons {float: center;
+          margin-top: 70px;
+          font-family: 'FontName';
+          font-size: 40px
+          }
+.nickname {color: #039;
+          font-family: 'FontName';
+          font-size: 70px;
+          text-align: center}
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: 'FontName';
+  font-size: 30px;
+  background: #3CB371;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: center;
+}
+th {
+  font-weight: normal;
+  color: #037;
+  border-right: 2px solid #6678b1;
+  border-left: 2px solid #6678b1;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  border-right: 2px solid #6678b1;
+  border-left: 2x solid #6678b1;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;
+}

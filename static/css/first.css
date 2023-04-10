@@ -8,12 +8,11 @@ background-attachment: fixed;
 -o-background-size: cover;
 background-size: cover;
 }
-h1 {
-       text-align: center;
-       font-family: 'FontName bold';
-	   font-size: 100px;
-	   color: #7FFFD4
-       }
+h1 {text-align: center;
+    font-family: 'FontName bold';
+	 font-size: 100px;
+	 color: #7FFFD4
+     }
 @font-face {
 	font-family: 'FontName bold';
 	src: url(/static/fonts/ofont.ru_Banff.ttf);

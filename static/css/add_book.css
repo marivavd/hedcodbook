@@ -1,0 +1,9 @@
+.main_text {text-align: center;
+    font-family: 'FontName bold';
+	 font-size: 60px;
+	 color: #7FFFD4
+     }
+@font-face {
+	font-family: 'FontName bold';
+	src: url(/static/fonts/ofont.ru_Banff.ttf);
+}

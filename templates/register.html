@@ -1,9 +1,8 @@
 {% extends "base_first.html" %}
 
 {% block content %}
-<img src="/static/img/html/emblem.jpg" width="50" height="40" alt="logo">
 <h1>Регистрация</h1>
-<form action="" method="post">
+<form action="" method="post" style="width: 40%; margin: auto; display: table">
     {{ form.hidden_tag() }}
     <p style="color: #E0FFFF">
         {{ form.name.label }}<br>
@@ -60,6 +59,6 @@
         {% endfor %}
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
+    <p style="color: red; font-size: 20px">{{message}}</p>
 </form>
 {% endblock %}

@@ -29,3 +29,31 @@
 p { word-wrap:break-word;
     font-family: 'FontName bold';
 	font-size: 40px;}
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: 'FontName bold';
+  font-size: 30px;
+  background: #FFD700;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: center;
+}
+th {
+  font-weight: normal;
+  color: #008B8B;
+  border-right: 2px solid #6678b1;
+  border-left: 2px solid #6678b1;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  border-right: 2px solid #6678b1;
+  border-left: 2x solid #6678b1;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;
+}

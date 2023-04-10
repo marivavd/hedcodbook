@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title%}home{% endblock %}
+{% block title%}add book{% endblock %}
 {% block content %}
-<img src="/static/img/html/emblem.jpg" width="50" height="40" alt="logo">
-<h1>Добавить книгу</h1>
-<form action="" method="post">
+<link rel="stylesheet" type="text/css" href="/static/css/add_book.css">
+<h1 class="main_text">Добавить книгу</h1>
+<form action="" method="post" style="width: 60%; margin: auto; display: table">
     {{ form.hidden_tag() }}
     <p style="color: #E0FFFF">
         {{ form.name.label }}<br>
@@ -15,45 +15,78 @@
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.surname.label }}<br>
-        {{ form.surname(class="form-control") }}<br>
-        {% for error in form.surname.errors %}
+        {{ form.author.label }}<br>
+        <select style="width: 500px; height: 40px">
+            <option>Я</option>
+            <option>Другое</option>
+            {% for i in sp_authors %}
+                <option>{{ i.name }} {{ i.surname }}</option>
+            {% endfor %}
+        </select>
+        {% for error in form.author.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.nickname.label }}<br>
-        {{ form.nickname(class="form-control") }}<br>
-        {% for error in form.nickname.errors %}
+        {{ form.genre.label }}<br>
+        {{ form.genre(class="form-control") }}<br>
+        {% for error in form.genre.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
+        {{ form.summary.label }}<br>
+        {{ form.summary(class="form-control") }}<br>
+        {% for error in form.summary.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
+        {{ form.history_of_creation.label }}<br>
+        {{ form.history_of_creation(class="form-control") }}<br>
+        {% for error in form.history_of_creation.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.password_again.label }}<br>
-        {{ form.password_again(class="form-control", type="password") }}<br>
-        {% for error in form.password_again.errors %}
+        {{ form.link_to_the_book.label }}<br>
+        {{ form.link_to_the_book(class="form-control") }}<br>
+        {% for error in form.link_to_the_book.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.link_to_the_production.label }}<br>
+        {{ form.link_to_the_production(class="form-control") }}<br>
+        {% for error in form.link_to_the_production.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.link_to_audio.label }}<br>
+        {{ form.link_to_audio(class="form-control") }}<br>
+        {% for error in form.link_to_audio.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.link_to_the_screenshot.label }}<br>
+        {{ form.link_to_the_screenshot(class="form-control") }}<br>
+        {% for error in form.link_to_the_screenshot.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>

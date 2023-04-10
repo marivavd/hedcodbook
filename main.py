@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
+from forms.book import PostForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
@@ -80,12 +81,47 @@ def index():
 @app.route("/user_page")
 def user_page():
     if current_user.is_authenticated:
-        return render_template("user_page.html", nickname=current_user.nickname)
+        sp_reading_now = current_user.books['reading_now']
+        sp_want_to_read = current_user.books["want_to_read"]
+        sp_were_read = current_user.books['were_read']
+        sp_all = []
+        for i in range(max(len(sp_want_to_read), len(sp_were_read), len(sp_reading_now))):
+            if len(sp_want_to_read) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_want_to_read[i].name, f'/book/{sp_want_to_read[i].id}'])
+            if len(sp_reading_now) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_reading_now[i].name, f'/book/{sp_reading_now[i].id}'])
+            if len(sp_were_read) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_were_read[i].name, f'/book/{sp_were_read[i].id}'])
+        return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
 
 
 @app.route("/add_book")
 def add_book():
-    return render_template("add_book.html")
+    form = PostForm()
+    db_sess = db_session.create_session()
+    sp_authors = db_sess.query(Authors).all()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
+        if check_book: # проверка на нахождение книги в библиотеке
+            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form, sp_authors=sp_authors)
+        if form.name.data.lower() == 'я':
+            add_author(current_user.name, current_user.surname)
+        elif form.name.data.lower() == 'другое':
+            add_author()
+        # прописать POST запрос
+    return render_template("add_book.html", sp_authors=sp_authors, form=form)
+
+
+@app.route("/add_author")
+def add_author(name='', surname=''):
+    pass
 
 
 @app.route("/book/<int:book_id>")
@@ -100,7 +136,13 @@ def open_book(book_id):
 def open_author(author_id):
     db_sess = db_session.create_session()
     author = db_sess.query(Authors).filter(Authors.id == author_id).first()
-    return render_template("author.html", author=author)
+    sp_books = db_sess.query(Library).filter(Library.author_id == author_id).all()
+    return render_template("author.html", author=author, sp_books=sp_books)
+
+
+@app.route("/no_information")
+def no_information():
+    return render_template("no_information.html")
 
 
 @app.route("/authors")

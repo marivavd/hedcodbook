@@ -1,18 +1,22 @@
 @font-face {
 	font-family: 'FontName2';
-	src: url(/static/fonts/ofont.ru_Maya.ttf)}
+	src: url(/static/fonts/ofont.ru_NK123.ttf)}
 @font-face {
 	font-family: 'FontName1';
-	src: url(/static/fonts/ofont.ru_NK123.ttf)}
-p { word-wrap:break-word;
-    font-family: 'FontName1';
+	src: url(/static/fonts/ofont.ru_Banff.ttf)}
+.text { word-wrap:break-word;
+    font-family: 'FontName2';
 	font-size: 40px;
 	color: black}
-.title {word-wrap:break-word;
+.link { word-wrap:break-word;
     font-family: 'FontName2';
+	font-size: 40px;
+	color: #008080}
+.title {word-wrap:break-word;
+    font-family: 'FontName1';
 	font-size: 70px;
 	color: MediumAquamarine}
 .author_name {word-wrap:break-word;
-             font-family: 'FontName2';
+             font-family: 'FontName1';
 	         font-size: 70px;
 	         color: black}

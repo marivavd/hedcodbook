@@ -7,4 +7,14 @@
   <img class="image2" src="{{ author.picture }}" />
 </div>
 <p>Информация об авторе: {{ author.about }}</p>
+<table class="container">
+  <thead>
+      <tr>
+        <th><h1>Произведения автора</h1></th>
+      </tr>
+  </thead>
+    {% for i in sp_books %}
+    <tr><th><a href="/book/{{ i.id }}">{{ i.name }}</a></th></tr>
+    {% endfor %}
+</table>
 {% endblock %}
