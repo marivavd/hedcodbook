@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'FontName';
-	src: url(/static/fonts/ofont.ru_NK123.ttf)}
+	src: url(/static/fonts/ofont.ru_Honday.ttf)}
 .round {
     border-radius: 100px; /* Радиус скругления */
     border: 3px solid green; /* Параметры рамки */
@@ -15,7 +15,8 @@
 .nickname {color: #039;
           font-family: 'FontName';
           font-size: 70px;
-          text-align: center}
+          text-align: center;
+          margin-top: 5px}
 table {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-family: 'FontName';
