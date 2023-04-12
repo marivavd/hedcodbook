@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a href="/" class="navbar-brand">
+        <img src="/static/img/html/emblem.jpg" width="50" height="40" alt="logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="#navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/authors">Authors</a>
+          </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/add_book">Add a book</a>
+          </li>
+        </ul>
+        <div class="mx-auto">
+          <form class="d-flex" role="search" method="POST" action="/h">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="e">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+      <a class="navbar-brand" href="/user_page">{{ current_user.nickname }}</a>
+    </nav>
+  <main role="main" class="container">
+    {% block content %}{% endblock %}
+  </main>
+  </body>
+</html>
