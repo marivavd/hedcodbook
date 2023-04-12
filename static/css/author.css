@@ -5,7 +5,8 @@
        }
 h2 {font-family: 'FontName bold';
     font-size: 50px;
-    color: #FFD700}
+    color: #FFD700;
+    margin-bottom: 30px}
 @font-face {
 	font-family: 'FontName bold';
 	src: url(/static/fonts/ofont.ru_Banff.ttf);
@@ -32,12 +33,3 @@ h2 {font-family: 'FontName bold';
 p { word-wrap:break-word;
     font-family: 'FontName bold';
 	font-size: 40px;}
-table {
-  width: 40%;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  background-image: url(/static/img/html/bookcase.jpg);
-}
-.link {font-family: 'FontName bold';
-	font-size: 30px;}
