@@ -8,9 +8,11 @@
 </div>
 <p>Информация об авторе: {{ author.about }}</p>
 <center><h2>Произведения автора</h2></center>
-<table>
-    {% for i in sp_books %}
-    <tr><th class="link"><a href="/book/{{ i.id }}" style="color: MediumSpringGreen" >{{ i.name }}</a></th></tr>
-    {% endfor %}
-</table>
+<p>
+{% for i in sp_books %}
+    <a href="/book/{{ i.id }}">
+        <img class="img_book" src="{{ i.picture }}" width="20%" height="30%">
+    </a>
+{% endfor %}
+</p>
 {% endblock %}
