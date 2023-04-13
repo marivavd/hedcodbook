@@ -64,8 +64,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 def index():
     if not current_user.is_authenticated:
         return render_template('index.html')
@@ -170,6 +169,7 @@ def open_page_with_authors():
     authors = db_sess.query(Authors).all()
     return render_template("authors.html", authors=authors, n=len(authors))
 
+
 @app.route("/h", methods=['GET', 'POST'])
 def h():
     print(request.form['e'])
@@ -206,5 +206,5 @@ def marks(user_id):
 
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
-    app.register_blueprint(main_api.blueprint)
+    app.register_blueprint(library_api.blueprint)
     app.run(port=8000)
