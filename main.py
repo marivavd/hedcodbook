@@ -7,9 +7,10 @@ from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
-from data import db_session
+from data import db_session, main_api
+
+from requests import get
 import random
-from data import db_session, library_api
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -68,13 +69,15 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        db_sess = db_session.create_session()
-        books = db_sess.query(Library).filter(Library.count_marks != 0).all()
-        books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
-        return render_template("home.html", sp_books=books)
+
+        book_filter = request.form.get('book_filter')
+        filter_text = request.form.get('search')
+
+        sp_books = get(f'http://127.0.0.1:8000/api/index/{book_filter}/{filter_text}').json()
+        return render_template("home.html", sp_books=sp_books)
     else:
         return render_template('index.html')
 
@@ -177,18 +180,6 @@ def open_page_with_authors():
     return render_template("authors.html", authors=authors, n=len(authors))
 
 
-@app.route("/h", methods=['GET', 'POST'])
-def h():
-    print(request.form['e'])
-    if current_user.is_authenticated:
-        db_sess = db_session.create_session()
-        books = db_sess.query(Library).filter(Library.count_marks != 0).all()
-        books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
-        return render_template("home.html", sp_books=books)
-    else:
-        return render_template('index.html')
-
-
 @app.route("/reviews/<int:user_id>")
 def reviews(user_id):
     db_sess = db_session.create_session()
@@ -211,7 +202,8 @@ def marks(user_id):
     return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
 
 
+
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
-    app.register_blueprint(library_api.blueprint)
+    app.register_blueprint(main_api.blueprint)
     app.run(port=8000)
