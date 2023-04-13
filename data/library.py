@@ -23,3 +23,6 @@ class Library(SqlAlchemyBase):
     count_marks = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     reviews = sqlalchemy.Column(sqlalchemy.JSON, default={})
     authors = orm.relationship('Authors')
+
+    def get_json_dict(self):
+        return dict(list(self.__dict__.items())[2:17])
