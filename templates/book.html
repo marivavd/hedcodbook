@@ -4,6 +4,18 @@
 <link rel="stylesheet" type="text/css" href="/static/css/book.css">
 <center><h1 class="title">{{ book.name }}</h1></center>
 <a href="/author/{{ author.id }}" class="author"><center><h1 class="author_name">{{ author.name }} {{ author.surname }}</h1></center></a>
+<div class="rating-area">
+	<input type="radio" id="star-5" name="rating" value="5">
+	<label for="star-5" title="Оценка «5»"></label>
+	<input type="radio" id="star-4" name="rating" value="4">
+	<label for="star-4" title="Оценка «4»"></label>
+	<input type="radio" id="star-3" name="rating" value="3">
+	<label for="star-3" title="Оценка «3»"></label>
+	<input type="radio" id="star-2" name="rating" value="2">
+	<label for="star-2" title="Оценка «2»"></label>
+	<input type="radio" id="star-1" name="rating" value="1">
+	<label for="star-1" title="Оценка «1»"></label>
+</div>
 <p class="text">Жанр: {{ book.genre }}</p>
 <p class="text">Краткое содержание: {{ book.summary }}</p>
 <p class="text">История создания: {{ book.history_of_creation }}</p>
@@ -19,4 +31,12 @@
 <a href="{{ book.link_to_the_screenshot }}">
     <p class="link">Ссылка на фильм</p>
 </a>
+{% for key, val in sl_reviews.items() %}
+<div class="col-md6 border rounded">
+    <h2>{{key}}</h2>
+    <div>
+        {{val}}
+    </div>
+</div>
+{% endfor %}
 {% endblock %}
