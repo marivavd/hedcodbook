@@ -129,8 +129,9 @@ def open_book(book_id):
     db_sess = db_session.create_session()
     book = db_sess.query(Library).filter(Library.id == book_id).first()
     sl_reviews = book.reviews
+    stars = book.summa_marks // book.count_marks
     author = db_sess.query(Authors).filter(Authors.id == book.author_id).first()
-    return render_template("book.html", book=book, author=author, sl_reviews=sl_reviews)
+    return render_template("book.html", book=book, author=author, sl_reviews=sl_reviews, stars=stars)
 
 
 @app.route("/author/<int:author_id>")
