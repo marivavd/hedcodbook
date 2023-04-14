@@ -34,15 +34,13 @@ def filter_book(books, book_filter, search):
     return list(filter(sl_filter[book_filter], books))
 
 
-@blueprint.route('/api/index/<book_filter>/<search>', methods=['GET'])
+@blueprint.route('/api/index/<book_filter>/<search>', methods=['GET', 'POST'])
 def index(book_filter, search):
     db_sess = db_session.create_session()
     books = db_sess.query(Library).filter(Library.count_marks != 0).all()
 
-    if search and search != 'None':
-        # Если поле не заполнено, то html выбрасывает 'None'
-        # если аргумент не передан, то python выбрасывает None
-        # оба случая не должны попасть в фильтр
+    book_filter, search = book_filter.strip('_'), search.strip('_')  # _ добавляется для работы API при ''
+    if search not in (None, 'None'):
         books = filter_book(books, book_filter, search)
 
     books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))

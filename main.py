@@ -70,15 +70,12 @@ def login():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    if current_user.is_authenticated:
-
-        book_filter = request.form.get('book_filter')
-        filter_text = request.form.get('search')
-
-        sp_books = get(f'http://127.0.0.1:8000/api/index/{book_filter}/{filter_text}').json()
-        return render_template("home.html", sp_books=sp_books)
-    else:
+    if not current_user.is_authenticated:
         return render_template('index.html')
+
+    return render_template("home.html", sp_books=get(f'http://127.0.0.1:8000/api/index/'
+                                                     f'{request.form.get("book_filter")}_/'
+                                                     f'{request.form.get("search")}_').json())
 
 
 @app.route("/user_page")
@@ -112,8 +109,9 @@ def add_book():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
-        if check_book: # проверка на нахождение книги в библиотеке
-            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form, sp_authors=sp_authors)
+        if check_book:  # проверка на нахождение книги в библиотеке
+            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
+                                   sp_authors=sp_authors)
         if form.name.data.lower() == 'я':
             add_author(current_user.name, current_user.surname)
         elif form.name.data.lower() == 'другое':
