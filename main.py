@@ -71,15 +71,12 @@ def login():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    if current_user.is_authenticated:
-
-        book_filter = request.form.get('book_filter')
-        filter_text = request.form.get('search')
-
-        sp_books = get(f'http://127.0.0.1:8000/api/index/{book_filter}/{filter_text}').json()
-        return render_template("home.html", sp_books=sp_books)
-    else:
+    if not current_user.is_authenticated:
         return render_template('index.html')
+
+    return render_template("home.html", sp_books=get(f'http://127.0.0.1:8000/api/index/'
+                                                     f'{request.form.get("book_filter")}_/'
+                                                     f'{request.form.get("search")}_').json())
 
 
 @app.route("/user_page")
