@@ -80,7 +80,7 @@
 	color: gold;
 	text-shadow: 1px 1px #c60;
 }
-label {
+.comment {
   font-family: 'FontName2';
   font-size: 40px;
   color: black
@@ -98,3 +98,12 @@ textarea {
   height: 5em;
   margin-left: 200px;
 }
+.status {border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  border: 2px solid;
+  transition: 0.2s all linear;
+  margin-right: 5px;
+
+  position: relative;
+  top: 4px;}

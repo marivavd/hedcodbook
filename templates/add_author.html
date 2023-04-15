@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title%}add author{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/static/css/add_book.css">
+<h1 class="main_text">Добавить автора</h1>
+<form action="" method="post" style="width: 60%; margin: auto; display: table">
+    {{ form.hidden_tag() }}
+    <p style="color: #E0FFFF">
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control") }}<br>
+        {% for error in form.name.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.surname.label }}<br>
+        {{ form.surname(class="form-control") }}<br>
+        {% for error in form.surname.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.picture.label }}<br>
+        <input type="file" name="picture" multiple accept="image/*,image/jpeg">
+    </p>
+    <p style="color: #E0FFFF">
+        {{ form.about.label }}<br>
+        {{ form.about(class="form-control") }}<br>
+        {% for error in form.about.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {{message}}
+</form>
+{% endblock %}
