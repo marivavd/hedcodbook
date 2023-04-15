@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet"
@@ -9,46 +9,48 @@
           crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
     <title>{% block title %}{% endblock %}</title>
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a href="/" class="navbar-brand">
+    <link href="/static/img/html/emblem.jpg" type="image/jpg" rel="shortcut icon">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a href="/" class="navbar-brand">
         <img src="/static/img/html/emblem.jpg" width="50" height="40" alt="logo">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="#navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="#navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="navbar-brand" href="/">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="navbar-brand" href="/authors">Authors</a>
-            </li>
-            <li class="nav-item active">
-                <a class="navbar-brand" href="/add_book">Add a book</a>
-            </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/authors">Authors</a>
+          </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/add_book">Add a book</a>
+          </li>
+          <li class="nav-item active">
+            <a class="navbar-brand" href="/add_author">Add an author</a>
+          </li>
         </ul>
         <div class="mx-auto">
-            <form class="d-flex" role="search" method="post">
-                <select name="book_filter">
-                    <option>title</option>
-                    <option>name</option>
-                    <option>surname</option>
-                    <option>genre</option>
-                </select>
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
         </div>
-    </div>
-    <a class="navbar-brand" href="/user_page">{{ current_user.nickname }}</a>
-</nav>
-<main role="main" class="container">
+      </div>
+      <a class="navbar-brand" href="/user_page">{{ current_user.nickname }}</a>
+    </nav>
+  <main role="main" class="container">
     {% block content %}{% endblock %}
-</main>
-</body>
+  </main>
+  </body>
+<footer class="bg-light text-center text-lg-start" style="margin-top: 20px">
+  <div class="text-center p-3" style="background-color: #DEB887; color: Snow">
+    Hedcodbook
+  </div>
+</footer>
 </html>
