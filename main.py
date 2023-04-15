@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
+from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
@@ -101,6 +102,23 @@ def user_page():
         return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
 
 
+@app.route("/add_author")
+def add_author():
+    form = AuthorForm()
+    db_sess = db_session.create_session()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
+                                                     Authors.surname.lower() == form.surname.data.lower()).first()
+        if check_author:  # проверка на нахождение автора в базк данных
+            return render_template('add_author.html', message="Этот автор уже с нами", form=form)
+        # прописать POST запрос
+        # а потом вернуть id_author
+        id_author = 1
+        return id_author
+    return render_template("add_author.html", form=form)
+
+
 @app.route("/add_book")
 def add_book():
     form = PostForm()
@@ -109,19 +127,24 @@ def add_book():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
-        if check_book: # проверка на нахождение книги в библиотеке
-            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form, sp_authors=sp_authors)
+        if check_book:  # проверка на нахождение книги в библиотеке
+            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
+                                   sp_authors=sp_authors)
         if form.name.data.lower() == 'я':
-            add_author(current_user.name, current_user.surname)
+            check_author_i = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
+                                                           Authors.surname.lower() == form.surname.data.lower()).first()
+            if check_author_i:
+                id_author = check_author_i['id']
+            else:
+                id_author = add_author()
         elif form.name.data.lower() == 'другое':
-            add_author()
+            id_author = add_author()
+        else:
+            check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
+                                                         Authors.surname.lower() == form.surname.data.lower()).first()
+            id_author = check_author['id']
         # прописать POST запрос
     return render_template("add_book.html", sp_authors=sp_authors, form=form)
-
-
-@app.route("/add_author")
-def add_author(name='', surname=''):
-    pass
 
 
 @app.route("/book/<int:book_id>")

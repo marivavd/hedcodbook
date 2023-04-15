@@ -15,6 +15,10 @@
         {% endfor %}
     </p>
     <p style="color: #E0FFFF">
+        {{ form.picture.label }}<br>
+        <input type="file" name="picture" multiple accept="image/*,image/jpeg">
+    </p>
+    <p style="color: #E0FFFF">
         {{ form.author.label }}<br>
         <select style="width: 500px; height: 40px">
             <option>Я</option>

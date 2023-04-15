@@ -10,7 +10,7 @@ class Library(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     author_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("authors.id"))
-    picture = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    picture = sqlalchemy.Column(sqlalchemy.String, nullable=True, default='/static/img/html/emblem.jpg')
     genre = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     link_to_the_production = sqlalchemy.Column(sqlalchemy.String, nullable=True, default='no_information')
     link_to_the_book = sqlalchemy.Column(sqlalchemy.String, nullable=True, default='no_information')

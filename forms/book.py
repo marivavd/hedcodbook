@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField
-from wtforms.fields import EmailField
+from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired
 
 
 class PostForm(FlaskForm):
     name = StringField('Название книги', validators=[DataRequired()])
     author = StringField('Имя и фамилия автора', validators=[DataRequired()])
+    picture = StringField('Обложка книги', validators=[DataRequired()])
     genre = StringField('Жанр', validators=[DataRequired()])
     summary = TextAreaField('Краткое содержание', validators=[DataRequired()])
     history_of_creation = TextAreaField('История создания', validators=[DataRequired()])
