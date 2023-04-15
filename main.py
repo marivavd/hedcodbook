@@ -89,6 +89,23 @@ def user_page():
         return render_template("user_page.html", nickname=current_user.nickname)
 
 
+@app.route("/add_author")
+def add_author():
+    form = AuthorForm()
+    db_sess = db_session.create_session()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
+                                                     Authors.surname.lower() == form.surname.data.lower()).first()
+        if check_author:  # проверка на нахождение автора в базк данных
+            return render_template('add_author.html', message="Этот автор уже с нами", form=form)
+        # прописать POST запрос
+        # а потом вернуть id_author
+        id_author = 1
+        return id_author
+    return render_template("add_author.html", form=form)
+
+
 @app.route("/add_book")
 def add_book():
     form = PostForm()
