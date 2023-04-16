@@ -189,6 +189,28 @@ def h():
         return render_template('index.html')
 
 
+@app.route("/reviews/<int:user_id>")
+def reviews(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    sl_reviews = user.books["comments"]
+    sl_names_books = []
+    for key, val in sl_reviews.items():
+        sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
+    return render_template("reviews.html", sl_reviews=sl_reviews, books=sl_names_books)
+
+
+@app.route("/marks/<int:user_id>")
+def marks(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    sl_marks = user.books["marks"]
+    sl_names_books = {}
+    for key, val in sl_marks.items():
+        sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
+    return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
+
+
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
     app.register_blueprint(library_api.blueprint)

@@ -5,8 +5,8 @@
     <h1 class="nickname">{{ current_user.nickname }}</h1>
     <img src="/static/img/avatars/{{ current_user.avatar }}" height="200" width="200" class="round" vspace="10" hspace="20%">
     <div class="buttons">
-        <a type="button" class="btn btn-info btn-lg" href="/#" style="margin: 5px">Мои отзывы</a>
-        <a type="button" class="btn btn-success btn-lg" href="/#" style="margin: 5px">Мои оценки</a>
+        <a type="button" class="btn btn-info btn-lg" href="/reviews/{{ current_user.id }}" style="margin: 5px">Мои отзывы</a>
+        <a type="button" class="btn btn-success btn-lg" href="/marks/{{ current_user.id }}" style="margin: 5px">Мои оценки</a>
         <a type="button" class="btn btn-danger btn-lg" href="/logout" style="margin: 5px">Выйти из аккаунта</a>
 	</div>
     <table class="container">
