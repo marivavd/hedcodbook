@@ -1,11 +1,9 @@
 """Модуль для переключения между страницами"""
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
 from forms.author import AuthorForm
-
 from data.users import User
 from data.library import Library
 from data.authors import Authors
@@ -34,7 +32,7 @@ def logout():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def reqister():
     form = RegisterForm()
 
     if not form.validate_on_submit():
@@ -50,6 +48,7 @@ def register():
     else:
         get('http://127.0.0.1:8000/api/register/', params=form.get_public())
         return redirect('/login')
+    return render_template('register.html', title='Регистрация', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -65,15 +64,14 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if not current_user.is_authenticated:
         return render_template('index.html')
-
-    return render_template("home.html", sp_books=get(f'http://127.0.0.1:8000/api/index/'
+    return render_template('home.html', sp_books=get(f'http://127.0.0.1:8000/api/index/'
                                                      f'{request.form.get("book_filter")}_/'
                                                      f'{request.form.get("search")}_').json())
-
 
 @app.route("/user_page")
 def user_page():
@@ -171,6 +169,39 @@ def open_page_with_authors():
     db_sess = db_session.create_session()
     authors = db_sess.query(Authors).all()
     return render_template("authors.html", authors=authors, n=len(authors))
+
+@app.route("/h", methods=['GET', 'POST'])
+def h():
+    print(request.form['e'])
+    if current_user.is_authenticated:
+        db_sess = db_session.create_session()
+        books = db_sess.query(Library).filter(Library.count_marks != 0).all()
+        books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
+        return render_template("home.html", sp_books=books)
+    else:
+        return render_template('index.html')
+
+
+@app.route("/reviews/<int:user_id>")
+def reviews(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    sl_reviews = user.books["comments"]
+    sl_names_books = []
+    for key, val in sl_reviews.items():
+        sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
+    return render_template("reviews.html", sl_reviews=sl_reviews, books=sl_names_books)
+
+
+@app.route("/marks/<int:user_id>")
+def marks(user_id):
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    sl_marks = user.books["marks"]
+    sl_names_books = {}
+    for key, val in sl_marks.items():
+        sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
+    return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
 
 
 if __name__ == '__main__':
