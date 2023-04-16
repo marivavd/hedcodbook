@@ -13,6 +13,19 @@ class RegisterForm(FlaskForm):
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     submit = SubmitField('Войти')
 
+    def get_public(self):
+        return {'name': self.name.data,
+                'surname': self.surname.data,
+                'email': self.email.data,
+                'nickname': self.nickname.data,
+                'password': self.password.data}
+
+    def check_password(self, that):
+        return self.password.data == that
+
+    def check_password_again(self):
+        return self.password.data == self.password_again.data
+
 
 class LoginForm(FlaskForm):
     nickname = StringField('Псевдоним', validators=[DataRequired()])
