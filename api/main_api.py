@@ -64,3 +64,17 @@ def register():
     db_sess.commit()
 
 
+@blueprint.route('/api/edit_status/<user_id>', methods=['PUT'])
+def edit_status(user_id):
+    db_sess = db_session.create_session()
+    if not request.json:
+        return jsonify({'error': 'Empty request'})
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).get(user_id)
+    if not user:
+        return jsonify({'error': 'Not found'})
+    user.books = request.json["books"]
+    db_sess.commit()
+    return jsonify({'success': 'OK'})
+
+

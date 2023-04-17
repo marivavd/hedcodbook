@@ -28,15 +28,15 @@
 <a href="{{ book.link_to_the_screenshot }}">
     <p class="link">Ссылка на фильм</p>
 </a>
-<form>
+<form method="post">
   <fieldset>
     <legend style="font-weight: bold">Выбери статус этой книги:</legend>
     <div style="font-size: 16px; font-weight: bold">
-      <input class="status" type="radio" id="want_to_read" name="contact" value="want_to_read"/>
+      <input class="status" type="radio" id="want_to_read" name="status" value="want_to_read"/>
       <label for="want_to_read">Хочу прочитать</label>
-      <input class="status" type="radio" id="reading_now" name="contact" value="reading_now"/>
+      <input class="status" type="radio" id="reading_now" name="status" value="reading_now"/>
       <label for="reading_now">Сейчас читаю</label>
-      <input class="status" type="radio" id="were_read" name="contact" value="were_read"/>
+      <input class="status" type="radio" id="were_read" name="status" value="were_read"/>
       <label for="reading_now">Уже прочитано</label>
     </div>
     <div>

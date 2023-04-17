@@ -9,7 +9,7 @@ from data.library import Library
 from data.authors import Authors
 
 from api import main_api
-from requests import get
+from requests import get, put
 import random
 from data import db_session
 
@@ -33,7 +33,7 @@ def logout():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
 
     if not form.validate_on_submit():
@@ -78,6 +78,7 @@ def index():
 @app.route("/user_page")
 def user_page():
     if current_user.is_authenticated:
+        db_sess = db_session.create_session()
         sp_reading_now = current_user.books['reading_now']
         sp_want_to_read = current_user.books["want_to_read"]
         sp_were_read = current_user.books['were_read']
@@ -86,22 +87,24 @@ def user_page():
             if len(sp_want_to_read) < i + 1:
                 sp_all.append(['', '/user_page'])
             else:
-                sp_all.append([sp_want_to_read[i].name, f'/book/{sp_want_to_read[i].id}'])
+                book = db_sess.query(Library).filter(Library.id == sp_want_to_read[i]).first()
+                sp_all.append([book.name, f'/book/{sp_want_to_read[i]}'])
             if len(sp_reading_now) < i + 1:
                 sp_all.append(['', '/user_page'])
             else:
-                sp_all.append([sp_reading_now[i].name, f'/book/{sp_reading_now[i].id}'])
+                book = db_sess.query(Library).filter(Library.id == sp_reading_now[i]).first()
+                sp_all.append([book.name, f'/book/{sp_reading_now[i]}'])
             if len(sp_were_read) < i + 1:
                 sp_all.append(['', '/user_page'])
             else:
-                sp_all.append([sp_were_read[i].name, f'/book/{sp_were_read[i].id}'])
+                book = db_sess.query(Library).filter(Library.id == sp_were_read[i]).first()
+                sp_all.append([book.name, f'/book/{sp_were_read[i]}'])
         return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
 
 
 @app.route("/add_author")
 def add_author():
     form = AuthorForm()
-    db_sess = db_session.create_session()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
@@ -143,8 +146,16 @@ def add_book():
     return render_template("add_book.html", sp_authors=sp_authors, form=form)
 
 
-@app.route("/book/<int:book_id>")
+@app.route("/book/<int:book_id>", methods=['GET', 'POST'])
 def open_book(book_id):
+    if request.method == "POST":
+        status = request.form['status']
+        for i in ["reading_now", "want_to_read", "were_read"]:
+            if i == status and book_id not in current_user.books[i]:
+                current_user.books[status].append(book_id)
+            elif i != status and book_id in current_user.books[i]:
+                current_user.books[i].remove(book_id)
+        put(f'http://127.0.0.1:8000/api/edit_status/{current_user.id}', json={'books': current_user.books, 'id': current_user.id}).json()
     db_sess = db_session.create_session()
     book = db_sess.query(Library).filter(Library.id == book_id).first()
     sl_reviews = book.reviews
@@ -175,7 +186,6 @@ def open_page_with_authors():
 
 @app.route("/h", methods=['GET', 'POST'])
 def h():
-    print(request.form['e'])
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         books = db_sess.query(Library).filter(Library.count_marks != 0).all()
