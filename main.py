@@ -1,16 +1,17 @@
 """Модуль для переключения между страницами"""
 from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
 from forms.author import AuthorForm
+
 from data.users import User
 from data.library import Library
 from data.authors import Authors
 
 from api import main_api
 from requests import get, put
-import random
 from data import db_session
 
 app = Flask(__name__)
@@ -49,7 +50,6 @@ def register():
     else:
         get('http://127.0.0.1:8000/api/register/', params=form.get_public())
         return redirect('/login')
-    return render_template('register.html', title='Регистрация', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -109,7 +109,7 @@ def add_author():
         db_sess = db_session.create_session()
         check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
                                                      Authors.surname.lower() == form.surname.data.lower()).first()
-        if check_author:  # проверка на нахождение автора в базк данных
+        if check_author:  # проверка на нахождение автора в базу данных
             return render_template('add_author.html', message="Этот автор уже с нами", form=form)
         # прописать POST запрос
         # а потом вернуть id_author
@@ -155,7 +155,8 @@ def open_book(book_id):
                 current_user.books[status].append(book_id)
             elif i != status and book_id in current_user.books[i]:
                 current_user.books[i].remove(book_id)
-        put(f'http://127.0.0.1:8000/api/edit_status/{current_user.id}', json={'books': current_user.books, 'id': current_user.id}).json()
+        put(f'http://127.0.0.1:8000/api/edit_status/{current_user.id}',
+            json={'books': current_user.books, 'id': current_user.id}).json()
     db_sess = db_session.create_session()
     book = db_sess.query(Library).filter(Library.id == book_id).first()
     sl_reviews = book.reviews
@@ -215,7 +216,6 @@ def marks(user_id):
     for key, val in sl_marks.items():
         sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
     return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
-
 
 
 if __name__ == '__main__':
