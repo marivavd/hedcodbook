@@ -64,9 +64,3 @@ def register():
     db_sess.commit()
 
 
-
-@app.route("/user_page")
-def user_page():
-    if current_user.is_authenticated:
-        sp_all = get('http://127.0.0.1:8000/api/user_page/', current_user.books)
-        return render_template("user_page.html", len_sp=len(sp_all.json()), sp_all=sp_all.json())
