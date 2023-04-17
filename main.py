@@ -1,5 +1,5 @@
 """Модуль для переключения между страницами"""
-from flask import Flask, render_template, redirect, request, abort, url_for
+from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
@@ -11,6 +11,7 @@ from data import db_session, main_api
 
 from requests import get
 import random
+from data import db_session
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -69,7 +70,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 def index():
     if current_user.is_authenticated:
 
@@ -85,41 +86,7 @@ def index():
 @app.route("/user_page")
 def user_page():
     if current_user.is_authenticated:
-        sp_reading_now = current_user.books['reading_now']
-        sp_want_to_read = current_user.books["want_to_read"]
-        sp_were_read = current_user.books['were_read']
-        sp_all = []
-        for i in range(max(len(sp_want_to_read), len(sp_were_read), len(sp_reading_now))):
-            if len(sp_want_to_read) < i + 1:
-                sp_all.append(['', '/user_page'])
-            else:
-                sp_all.append([sp_want_to_read[i].name, f'/book/{sp_want_to_read[i].id}'])
-            if len(sp_reading_now) < i + 1:
-                sp_all.append(['', '/user_page'])
-            else:
-                sp_all.append([sp_reading_now[i].name, f'/book/{sp_reading_now[i].id}'])
-            if len(sp_were_read) < i + 1:
-                sp_all.append(['', '/user_page'])
-            else:
-                sp_all.append([sp_were_read[i].name, f'/book/{sp_were_read[i].id}'])
-        return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
-
-
-@app.route("/add_author")
-def add_author():
-    form = AuthorForm()
-    db_sess = db_session.create_session()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
-                                                     Authors.surname.lower() == form.surname.data.lower()).first()
-        if check_author:  # проверка на нахождение автора в базк данных
-            return render_template('add_author.html', message="Этот автор уже с нами", form=form)
-        # прописать POST запрос
-        # а потом вернуть id_author
-        id_author = 1
-        return id_author
-    return render_template("add_author.html", form=form)
+        return render_template("user_page.html", nickname=current_user.nickname)
 
 
 @app.route("/add_book")
