@@ -25,4 +25,4 @@ class Library(SqlAlchemyBase):
     authors = orm.relationship('Authors')
 
     def get_json_dict(self):
-        return dict(list(self.__dict__.items())[2:17])
+        return dict(list(self.__dict__.items())[1:17])
