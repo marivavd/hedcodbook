@@ -1,5 +1,5 @@
 """Модуль для переключения между страницами"""
-from flask import Flask, render_template, redirect, request, abort, url_for
+from flask import Flask, render_template, redirect, request
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
@@ -7,11 +7,10 @@ from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
-from data import db_session, main_api
+from data import db_session
 
 from api import main_api
 from requests import get
-import random
 
 app = Flask(__name__)
 login_manager = LoginManager()
