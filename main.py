@@ -7,10 +7,11 @@ from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
-from data import db_session
+from data import db_session, main_api
 
 from api import main_api
 from requests import get
+import random
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -64,7 +65,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     if not current_user.is_authenticated:
         return render_template('index.html')
@@ -204,7 +205,8 @@ def marks(user_id):
     return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
 
 
+
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
-    app.register_blueprint(library_api.blueprint)
+    app.register_blueprint(main_api.blueprint)
     app.run(port=8000)
