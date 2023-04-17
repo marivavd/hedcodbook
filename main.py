@@ -86,7 +86,24 @@ def index():
 @app.route("/user_page")
 def user_page():
     if current_user.is_authenticated:
-        return render_template("user_page.html", nickname=current_user.nickname)
+        sp_reading_now = current_user.books['reading_now']
+        sp_want_to_read = current_user.books["want_to_read"]
+        sp_were_read = current_user.books['were_read']
+        sp_all = []
+        for i in range(max(len(sp_want_to_read), len(sp_were_read), len(sp_reading_now))):
+            if len(sp_want_to_read) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_want_to_read[i].name, f'/book/{sp_want_to_read[i].id}'])
+            if len(sp_reading_now) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_reading_now[i].name, f'/book/{sp_reading_now[i].id}'])
+            if len(sp_were_read) < i + 1:
+                sp_all.append(['', '/user_page'])
+            else:
+                sp_all.append([sp_were_read[i].name, f'/book/{sp_were_read[i].id}'])
+        return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
 
 
 @app.route("/add_author")
