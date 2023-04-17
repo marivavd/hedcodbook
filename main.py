@@ -1,5 +1,5 @@
 """Модуль для переключения между страницами"""
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
@@ -7,10 +7,11 @@ from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
-from data import db_session
 
 from api import main_api
 from requests import get
+import random
+from data import db_session
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -68,9 +69,11 @@ def login():
 def index():
     if not current_user.is_authenticated:
         return render_template('index.html')
-    return render_template('home.html', sp_books=get(f'http://127.0.0.1:8000/api/index/'
+
+    return render_template("home.html", sp_books=get(f'http://127.0.0.1:8000/api/index/'
                                                      f'{request.form.get("book_filter")}_/'
                                                      f'{request.form.get("search")}_').json())
+
 
 @app.route("/user_page")
 def user_page():

@@ -1,8 +1,10 @@
 from flask import request, jsonify, Blueprint
 from data import db_session
 from data.library import Library
-import json
 
+from data.users import User
+from random import choice
+import json
 
 blueprint = Blueprint('main_api', __name__, template_folder='templates')
 
@@ -34,7 +36,7 @@ def filter_book(books, book_filter, search):
     return list(filter(sl_filter[book_filter], books))
 
 
-@blueprint.route('/api/index/<book_filter>/<search>', methods=['GET', 'POST'])
+@blueprint.route('/api/index/<book_filter>/<search>', methods=['GET'])
 def index(book_filter, search):
     db_sess = db_session.create_session()
     books = db_sess.query(Library).filter(Library.count_marks != 0).all()
@@ -45,3 +47,26 @@ def index(book_filter, search):
 
     books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
     return json.dumps(books, default=lambda x: x.get_json_dict())
+
+
+@blueprint.route('/api/register/', methods=['GET'])
+def register():
+    user = User(
+        name=request.args.get('name'),
+        surname=request.args.get('surname'),
+        email=request.args.get('email'),
+        nickname=request.args.get('nickname'),
+        avatar=choice(['avatar_raccoon.jpg', 'avatar_hedgehog.jpg'])
+    )
+    user.set_password(request.args.get('password'))
+    db_sess = db_session.create_session()
+    db_sess.add(user)
+    db_sess.commit()
+
+
+
+@app.route("/user_page")
+def user_page():
+    if current_user.is_authenticated:
+        sp_all = get('http://127.0.0.1:8000/api/user_page/', current_user.books)
+        return render_template("user_page.html", len_sp=len(sp_all.json()), sp_all=sp_all.json())
