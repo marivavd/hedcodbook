@@ -1,7 +1,7 @@
 """Модуль для переключения между страницами"""
 from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
+from werkzeug.utils import secure_filename
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
 from forms.author import AuthorForm
@@ -118,19 +118,26 @@ def add_author():
     return render_template("add_author.html", form=form)
 
 
-@app.route("/add_book")
+@app.route("/add_book", methods=['POST', 'GET'])
 def add_book():
-    form = PostForm()
     db_sess = db_session.create_session()
     sp_authors = db_sess.query(Authors).all()
-
-    if form.validate_on_submit():
-        print(1)
-        post('http://127.0.0.1:8000/api/add_book/', params=form.get_all())
-        check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
-        if check_book:  # проверка на нахождение книги в библиотеке
-            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
-                                   sp_authors=sp_authors)
+    form = PostForm()
+    if request.method == "POST":
+        if request.form.get('comp_select') == 'Я':
+            author = current_user.name + ' ' + current_user.surname
+        elif request.form.get('comp_select') == 'Другое':
+            return
+        else:
+            author = request.form.get('comp_select')
+        f = request.files['picture']
+        photo_file = open(f'static/img/books/{f.filename}', "wb")
+        photo_file.write(f.read())
+        post('http://127.0.0.1:8000/api/add_book/', params=form.get_all(author))
+        # check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
+        # if check_book:  # проверка на нахождение книги в библиотеке
+            # return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
+                                   # sp_authors=sp_authors)
     return render_template("add_book.html", sp_authors=sp_authors, form=form)
 
 

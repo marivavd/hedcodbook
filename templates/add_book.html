@@ -3,7 +3,7 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="/static/css/add_book.css">
 <h1 class="main_text">Добавить книгу</h1>
-<form action="" method="post" style="width: 60%; margin: auto; display: table">
+<form action="" method="post" style="width: 60%; margin: auto; display: table" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <p style="color: #E0FFFF">
         {{ form.name.label }}<br>
@@ -16,22 +16,17 @@
     </p>
     <p style="color: #E0FFFF">
         {{ form.picture.label }}<br>
-        <input type="file" name="picture" multiple accept="image/*,image/jpeg">
+        {{ form.picture() }}
     </p>
     <p style="color: #E0FFFF">
-        {{ form.author.label }}<br>
-        <select style="width: 500px; height: 40px">
+        Имя и фамилия автора<br>
+        <select  name="comp_select" style="width: 500px; height: 40px">
             <option>Я</option>
             <option>Другое</option>
             {% for i in sp_authors %}
                 <option>{{ i.name }} {{ i.surname }}</option>
             {% endfor %}
         </select>
-        {% for error in form.author.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
     </p>
     <p style="color: #E0FFFF">
         {{ form.genre.label }}<br>

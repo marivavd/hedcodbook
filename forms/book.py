@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField, FileField
 from wtforms.validators import DataRequired
 
 
 class PostForm(FlaskForm):
     name = StringField('Название книги', validators=[DataRequired()])
-    author = StringField('Имя и фамилия автора', validators=[DataRequired()])
-    picture = StringField('Обложка книги', validators=[DataRequired()])
+    # author = SelectField('Имя и фамилия автора')
+    picture = FileField('Обложка книги')
     genre = StringField('Жанр', validators=[DataRequired()])
     summary = TextAreaField('Краткое содержание', validators=[DataRequired()])
     history_of_creation = TextAreaField('История создания', validators=[DataRequired()])
@@ -16,11 +16,11 @@ class PostForm(FlaskForm):
     link_to_the_screenshot = StringField('Ссылка на фильм', validators=[DataRequired()])
     submit = SubmitField('Добавить')
 
-    def get_all(self):
-        return {'name': self.name.data.lower(),
-                'author_name': self.author.data.split(' ')[0],
-                'author_surname': ' '.join(self.author.data.split(' ')[1:]),
-                'picture': self.picture.data,
+    def get_all(self, author):
+        return {'name': self.name.data,
+                'author_name': author.split()[0],
+                'author_surname': ' '.join(author.split()[1:]),
+                'picture': self.picture.data.filename,
                 'genre': self.genre.data,
                 'summary': self.summary.data,
                 'history_of_creation': self.history_of_creation.data,

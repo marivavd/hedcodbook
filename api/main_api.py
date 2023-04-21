@@ -88,15 +88,7 @@ def get_author(name, surname):
 def web_add_book():
     name = request.args.get('author_name')
     surname = request.args.get('author_surname')
-    if name == 'я':
-        if get_author(name, surname):
-            add_book_in_db(request.args)
-        else:
-            return 'add_author'
-    elif name == 'другое':
-        return 'add_author'
-    else:
-        id_author = get_author(name, surname)['id']
+    id_author = get_author(name, surname)['id']
     # прописать POST запрос
 
 
