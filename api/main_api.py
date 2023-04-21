@@ -3,6 +3,7 @@ from data import db_session
 from data.library import Library
 
 from data.users import User
+from data.authors import Authors
 from random import choice
 import json
 
@@ -66,7 +67,6 @@ def register():
 
 @blueprint.route('/api/edit_status/<user_id>', methods=['PUT'])
 def edit_status(user_id):
-    db_sess = db_session.create_session()
     if not request.json:
         return jsonify({'error': 'Empty request'})
     db_sess = db_session.create_session()
@@ -78,3 +78,43 @@ def edit_status(user_id):
     return jsonify({'success': 'OK'})
 
 
+def get_author(name, surname):
+    db_sess = db_session.create_session()
+    return db_sess.query(Authors).filter(Authors.name.lower() == name,
+                                         Authors.surname.lower() == surname).first()
+
+
+@blueprint.route('/api/add_book', methods=['POST'])
+def web_add_book():
+    name = request.args.get('author_name')
+    surname = request.args.get('author_surname')
+    if name == 'я':
+        if get_author(name, surname):
+            add_book_in_db(request.args)
+        else:
+            return 'add_author'
+    elif name == 'другое':
+        return 'add_author'
+    else:
+        id_author = get_author(name, surname)['id']
+    # прописать POST запрос
+
+
+def add_book_in_db(form):
+    book = Library(
+        name=form.name,
+        author_id=get_author(form.get('author_name'),
+                             form.get('author_surname')).id,
+        picture=form.picture,
+        genre=form.genre,
+        summary=form.summary,
+        history_of_creation=form.history_of_creation,
+        link_to_the_form=form.link_to_the_form,
+        link_to_the_production=form.link_to_the_production,
+        link_to_audio=form.link_to_audio,
+        link_to_the_screenshot=form.link_to_the_screenshot,
+        submit=form.submit)
+
+    db_sess = db_session.create_session()
+    db_sess.add(book)
+    db_sess.commit()
