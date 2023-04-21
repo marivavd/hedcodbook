@@ -9,3 +9,12 @@ class AuthorForm(FlaskForm):
     picture = StringField('Фото', validators=[DataRequired()])
     about = TextAreaField('Немного об авторе', validators=[DataRequired()])
     submit = SubmitField('Добавить')
+
+    def get_all(self):
+        return {'name': self.name.data.lower(),
+                'surname': self.surname.data.lower(),
+                'picture': self.picture.data,
+                'about': self.about.data}
+
+    def get_fullname(self):
+        return self.name.data.lower(), self.surname.data.lower()

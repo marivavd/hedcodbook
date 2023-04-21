@@ -84,20 +84,15 @@ def get_author(name, surname):
                                          Authors.surname.lower() == surname).first()
 
 
-@blueprint.route('/api/add_book', methods=['POST'])
+@blueprint.route('/api/add_book', methods=['GET'])
 def web_add_book():
     name = request.args.get('author_name')
     surname = request.args.get('author_surname')
-    if name == 'я':
-        if get_author(name, surname):
-            add_book_in_db(request.args)
-        else:
-            return 'add_author'
-    elif name == 'другое':
-        return 'add_author'
+
+    if (name == 'я' and not get_author(name, surname)) or name == 'другое':
+        add_book_in_db(request.args)
     else:
-        id_author = get_author(name, surname)['id']
-    # прописать POST запрос
+        return jsonify('add_author')
 
 
 def add_book_in_db(form):
@@ -117,4 +112,18 @@ def add_book_in_db(form):
 
     db_sess = db_session.create_session()
     db_sess.add(book)
+    db_sess.commit()
+
+
+@blueprint.route('/api/add_author', methods=['PUT'])
+def add_author():
+    form = request.args
+    author = Authors(
+        name=form.get('name'),
+        surname=form.get('surname'),
+        about=form.get('about'),
+        picture=form.get('picture'))
+
+    db_sess = db_session.create_session()
+    db_sess.add(author)
     db_sess.commit()

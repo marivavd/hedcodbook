@@ -9,6 +9,7 @@ from forms.author import AuthorForm
 from data.users import User
 from data.library import Library
 from data.authors import Authors
+from data.db import MyDataBase
 
 from api import main_api
 from requests import get, put, post
@@ -18,6 +19,7 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+db = MyDataBase()
 
 
 @login_manager.user_loader
@@ -102,36 +104,33 @@ def user_page():
         return render_template("user_page.html", len_sp=len(sp_all), sp_all=sp_all)
 
 
-@app.route("/add_author")
+@app.route("/add_author", methods=['GET', 'POST'])
 def add_author():
     form = AuthorForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
-                                                     Authors.surname.lower() == form.surname.data.lower()).first()
-        if check_author:  # проверка на нахождение автора в базу данных
-            return render_template('add_author.html', message="Этот автор уже с нами", form=form)
-        # прописать POST запрос
-        # а потом вернуть id_author
-        id_author = 1
-        return id_author
-    return render_template("add_author.html", form=form)
+    name, surname = form.get_fullname()
+
+    if not form.validate_on_submit():
+        return render_template("add_author.html", form=form)
+
+    if db.check_author(name, surname):
+        return render_template('add_author.html', message="Этот автор уже с нами", form=form)
+    put('http://127.0.0.1:8000/api/add_author', params=form.get_all())
+    return url_for('/')
 
 
-@app.route("/add_book")
+@app.route("/add_book", methods=['GET', 'POST'])
 def add_book():
     form = PostForm()
-    db_sess = db_session.create_session()
-    sp_authors = db_sess.query(Authors).all()
+    if not form.validate_on_submit():
+        return render_template("add_book.html", sp_authors=db.get_sp_authors(), form=form)
 
-    if form.validate_on_submit():
-        print(1)
-        post('http://127.0.0.1:8000/api/add_book/', params=form.get_all())
-        check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
-        if check_book:  # проверка на нахождение книги в библиотеке
-            return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
-                                   sp_authors=sp_authors)
-    return render_template("add_book.html", sp_authors=sp_authors, form=form)
+    if db.check_book(form.name.data):
+        return render_template('add_book.html',
+                               message="Эта книга уже есть в нашей библиотеке",
+                               form=form, sp_authors=db.get_sp_authors())
+
+    is_new_author = get('http://127.0.0.1:8000/api/add_book/', params=form.get_all()).json()
+    return url_for('/add_author' if is_new_author else '/')
 
 
 @app.route("/book/<int:book_id>", methods=['GET', 'POST'])
