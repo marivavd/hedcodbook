@@ -11,7 +11,7 @@ from data.library import Library
 from data.authors import Authors
 
 from api import main_api
-from requests import get, put
+from requests import get, put, post
 from data import db_session
 
 app = Flask(__name__)
@@ -123,26 +123,14 @@ def add_book():
     form = PostForm()
     db_sess = db_session.create_session()
     sp_authors = db_sess.query(Authors).all()
+
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
+        print(1)
+        post('http://127.0.0.1:8000/api/add_book/', params=form.get_all())
         check_book = db_sess.query(Library).filter(Library.name.lower() == form.name.data.lower()).first()
         if check_book:  # проверка на нахождение книги в библиотеке
             return render_template('add_book.html', message="Эта книга уже есть в нашей библиотеке", form=form,
                                    sp_authors=sp_authors)
-        if form.name.data.lower() == 'я':
-            check_author_i = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
-                                                           Authors.surname.lower() == form.surname.data.lower()).first()
-            if check_author_i:
-                id_author = check_author_i['id']
-            else:
-                id_author = add_author()
-        elif form.name.data.lower() == 'другое':
-            id_author = add_author()
-        else:
-            check_author = db_sess.query(Authors).filter(Authors.name.lower() == form.name.data.lower(),
-                                                         Authors.surname.lower() == form.surname.data.lower()).first()
-            id_author = check_author['id']
-        # прописать POST запрос
     return render_template("add_book.html", sp_authors=sp_authors, form=form)
 
 
@@ -184,17 +172,6 @@ def open_page_with_authors():
     db_sess = db_session.create_session()
     authors = db_sess.query(Authors).all()
     return render_template("authors.html", authors=authors, n=len(authors))
-
-
-@app.route("/h", methods=['GET', 'POST'])
-def h():
-    if current_user.is_authenticated:
-        db_sess = db_session.create_session()
-        books = db_sess.query(Library).filter(Library.count_marks != 0).all()
-        books.sort(key=lambda i: (-i.summa_marks / i.count_marks, -i.count_marks))
-        return render_template("home.html", sp_books=books)
-    else:
-        return render_template('index.html')
 
 
 @app.route("/reviews/<int:user_id>")
