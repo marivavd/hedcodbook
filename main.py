@@ -137,6 +137,7 @@ def add_book():
 def open_book(book_id):
     if request.method == "POST":
         status = request.form['status']
+        print(status)
         for i in ["reading_now", "want_to_read", "were_read"]:
             if i == status and book_id not in current_user.books[i]:
                 current_user.books[status].append(book_id)
@@ -192,6 +193,11 @@ def marks(user_id):
     for key, val in sl_marks.items():
         sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
     return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
+
+
+@app.route("/send_reviews/<int:book_id>", methods=['GET', 'POST'])
+def send_reviews(book_id):
+    message = request.form['user_message']
 
 
 if __name__ == '__main__':

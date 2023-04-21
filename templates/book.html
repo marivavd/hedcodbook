@@ -44,6 +44,7 @@
     </div>
   </fieldset>
 </form>
+<form method="post" action="{{ url_for('send_reviews', book_id = book.id)}}">
 <center><div class="rating-area">
 	<input type="radio" id="star-5" name="rating" value="5">
 	<label for="star-5" title="Оценка «5»"></label>
@@ -58,7 +59,10 @@
 </div></center>
 <label class="comment" for="msg">Комментарий:</label>
 <textarea id="msg" name="user_message"></textarea>
-<p><input type="button" value="Оставить отзыв"></p>
+<div>
+    <button type="submit">Оставить отзыв</button>
+</div>
+</form>
 {% for key, val in sl_reviews.items() %}
 <div class="col-md6 border rounded">
     <h2>{{key}}</h2>
