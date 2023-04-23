@@ -120,25 +120,14 @@ def add_author():
 
 @app.route("/add_book", methods=['POST', 'GET'])
 def add_book():
-    db_sess = db_session.create_session()
-    sp_authors = db_sess.query(Authors).all()
     form = PostForm()
-    if request.method == "POST":
-        if request.form.get('comp_select') == 'Я':
-            author = current_user.name + ' ' + current_user.surname
-        elif request.form.get('comp_select') == 'Другое':
-            return
-        else:
-            author = request.form.get('comp_select')
-        if db.check_book(form.name.data):
-            return render_template('add_book.html',
-                                   message="Эта книга уже есть в нашей библиотеке",
-                                   form=form, sp_authors=db.get_sp_authors())
-        f = request.files['picture']
-        photo_file = open(f'static/img/books/{f.filename}', "wb")
-        photo_file.write(f.read())
-        post('http://127.0.0.1:8000/api/add_book/', params=form.get_all(author))
-    return render_template("add_book.html", sp_authors=sp_authors, form=form)
+    if not form.validate_on_submit():
+        return render_template("add_book.html", sp_authors=db.get_sp_authors(), form=form)
+
+    if db.check_book(form.name.data):
+        return render_template('add_book.html',
+                               message="Эта книга уже есть в нашей библиотеке",
+                               form=form, sp_authors=db.get_sp_authors())
 
     is_new_author = get('http://127.0.0.1:8000/api/add_book/', params=form.get_all()).json()
     return url_for('/add_author' if is_new_author else '/')
