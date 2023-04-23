@@ -1,13 +1,16 @@
 from flask import request, jsonify, Blueprint
+
 from data import db_session
 from data.library import Library
-
 from data.users import User
 from data.authors import Authors
+from data.db import MyDataBase
+
 from random import choice
 import json
 
 blueprint = Blueprint('main_api', __name__, template_folder='templates')
+db = MyDataBase()
 
 
 @blueprint.route('/api/books', methods=['POST'])
@@ -104,33 +107,45 @@ def edit_status(user_id):
     return jsonify({'success': 'OK'})
 
 
-def get_author(name, surname):
-    db_sess = db_session.create_session()
-    return db_sess.query(Authors).filter(Authors.name.lower() == name,
-                                         Authors.surname.lower() == surname).first()
-
-
-@blueprint.route('/api/add_book', methods=['POST'])
+@blueprint.route('/api/add_book/', methods=['GET'])
 def web_add_book():
     name = request.args.get('author_name')
     surname = request.args.get('author_surname')
 
+    if (name == 'Я' and not db.get_author(name, surname)) or name == 'Другое':
+        return jsonify({'is_new_author': True})
+    else:
+        add_book_in_db(request.args)
+        return jsonify({'is_new_author': False})
 
-def add_book_in_db(form):
+
+def add_book_in_db(form: dict):
     book = Library(
-        name=form.name,
-        author_id=get_author(form.get('author_name'),
-                             form.get('author_surname')).id,
-        picture=form.picture,
-        genre=form.genre,
-        summary=form.summary,
-        history_of_creation=form.history_of_creation,
-        link_to_the_form=form.link_to_the_form,
-        link_to_the_production=form.link_to_the_production,
-        link_to_audio=form.link_to_audio,
-        link_to_the_screenshot=form.link_to_the_screenshot,
-        submit=form.submit)
-
+        name=form.get('name'),
+        author_id=db.get_author(form.get('author_name'),
+                                form.get('author_surname')),
+        picture=form.get('picture'),
+        genre=form.get('genre'),
+        summary=form.get('summary'),
+        history_of_creation=form.get('history_of_creation'),
+        link_to_the_book=form.get('link_to_the_book'),
+        link_to_the_production=form.get('link_to_the_production'),
+        link_to_audio=form.get('link_to_audio'),
+        link_to_the_screenshot=form.get('link_to_the_screenshot'))
     db_sess = db_session.create_session()
     db_sess.add(book)
+    # db_sess.commit()
+
+
+@blueprint.route('/api/add_author', methods=['PUT'])
+def add_author():
+    form = request.args
+    author = Authors(
+        name=form.get('name'),
+        surname=form.get('surname'),
+        about=form.get('about'),
+        picture=form.get('picture'))
+
+    db_sess = db_session.create_session()
+    db_sess.add(author)
     db_sess.commit()

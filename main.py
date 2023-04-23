@@ -107,30 +107,39 @@ def user_page():
 @app.route("/add_author", methods=['GET', 'POST'])
 def add_author():
     form = AuthorForm()
-    name, surname = form.get_fullname()
+
+    if request.method == 'GET':
+        return render_template('add_author.html', form=form)
 
     if not form.validate_on_submit():
         return render_template("add_author.html", form=form)
 
-    if db.check_author(name, surname):
+    if db.get_author(*form.get_fullname()):
         return render_template('add_author.html', message="Этот автор уже с нами", form=form)
+
     put('http://127.0.0.1:8000/api/add_author', params=form.get_all())
-    return url_for('/')
+    return get('http://127.0.0.1:8000/').content.decode('utf-8')
 
 
 @app.route("/add_book", methods=['POST', 'GET'])
 def add_book():
     form = PostForm()
+
     if not form.validate_on_submit():
         return render_template("add_book.html", sp_authors=db.get_sp_authors(), form=form)
+    form += request.form.get('comp_select')
 
     if db.check_book(form.name.data):
         return render_template('add_book.html',
                                message="Эта книга уже есть в нашей библиотеке",
                                form=form, sp_authors=db.get_sp_authors())
 
-    is_new_author = get('http://127.0.0.1:8000/api/add_book/', params=form.get_all()).json()
-    return url_for('/add_author' if is_new_author else '/')
+    is_new_author = get('http://127.0.0.1:8000/api/add_book/',
+                        params=form.get_all()).json()['is_new_author']
+    if is_new_author:
+        return get('http://127.0.0.1:8000/add_author').content.decode('utf-8')
+    else:
+        return get('http://127.0.0.1:8000/').content.decode('utf-8')
 
 
 @app.route("/book/<int:book_id>", methods=['GET', 'POST'])

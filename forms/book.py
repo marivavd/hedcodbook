@@ -5,7 +5,6 @@ from wtforms.validators import DataRequired
 
 class PostForm(FlaskForm):
     name = StringField('Название книги', validators=[DataRequired()])
-    # author = SelectField('Имя и фамилия автора')
     picture = FileField('Обложка книги')
     genre = StringField('Жанр', validators=[DataRequired()])
     summary = TextAreaField('Краткое содержание', validators=[DataRequired()])
@@ -15,11 +14,20 @@ class PostForm(FlaskForm):
     link_to_audio = StringField('Ссылка на аудиокнигу', validators=[DataRequired()])
     link_to_the_screenshot = StringField('Ссылка на фильм', validators=[DataRequired()])
     submit = SubmitField('Добавить')
+    author = None
 
-    def get_all(self, author):
+    def __add__(self, other):
+        self.author = other
+        return self
+
+    def __iadd__(self, other):
+        self.author = other
+        return self
+
+    def get_all(self):
         return {'name': self.name.data,
-                'author_name': author.split()[0],
-                'author_surname': ' '.join(author.split()[1:]),
+                'author_name': self.author.split()[0],
+                'author_surname': ' '.join(self.author.split()[1:]),
                 'picture': self.picture.data.filename,
                 'genre': self.genre.data,
                 'summary': self.summary.data,
