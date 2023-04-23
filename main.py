@@ -148,7 +148,6 @@ def add_book():
 def open_book(book_id):
     if request.method == "POST":
         status = request.form['status']
-        print(status)
         for i in ["reading_now", "want_to_read", "were_read"]:
             if i == status and book_id not in current_user.books[i]:
                 current_user.books[status].append(book_id)
@@ -189,7 +188,8 @@ def reviews(user_id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
     sl_reviews = user.books["comments"]
-    sl_names_books = []
+    sl_names_books = {}
+
     for key, val in sl_reviews.items():
         sl_names_books[key] = db_sess.query(Library).filter(Library.id == key).first().name
     return render_template("reviews.html", sl_reviews=sl_reviews, books=sl_names_books)
@@ -206,9 +206,34 @@ def marks(user_id):
     return render_template("marks.html", sl_marks=sl_marks, books=sl_names_books)
 
 
+@app.route("/send_marks/<int:book_id>", methods=['GET', 'POST'])
+def send_marks(book_id):
+    if request.method == 'POST':
+        mark = request.form['mark']
+        current_user.books['marks'][book_id] = int(mark)
+        put(f'http://127.0.0.1:8000/api/comment_mark/{current_user.id}',
+            json={'books': current_user.books, 'id': current_user.id}).json()
+        db_sess = db_session.create_session()
+        book = db_sess.query(Library).filter(Library.id == book_id).first()
+        book.summa_marks += int(mark)
+        book.count_marks += 1
+        db_sess.commit()
+    return redirect(f'/book/{book_id}')
+
+
 @app.route("/send_reviews/<int:book_id>", methods=['GET', 'POST'])
 def send_reviews(book_id):
-    message = request.form['user_message']
+    if request.method == 'POST':
+        message = request.form['user_message']
+        current_user.books['comments'][int(book_id)] = message
+        put(f'http://127.0.0.1:8000/api/comment_mark/{current_user.id}',
+            json={'books': current_user.books, 'id': current_user.id}).json()
+        db_sess = db_session.create_session()
+        book = db_sess.query(Library).filter(Library.id == book_id).first()
+        book.reviews[current_user.nickname] = message
+        put(f'http://127.0.0.1:8000/api/comment_for_book/{book.id}',
+            json={'reviews': book.reviews, 'id': book.id}).json()
+    return redirect(f'/book/{book_id}')
 
 
 if __name__ == '__main__':

@@ -3,18 +3,28 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="/static/css/marks.css">
 <h1>Ваши оценки</h1>
-{% for key, val in sl_marks.items() %}
-<a href="/book/{{ key }}">
-    <h2>Книга: {{books[key]}}</h2>
-</a>
-<div class="rating-result">
-    {% for i in range(1, 6) %}
-    {% if val >= i %}
-    <span class="active"></span>
-    {% else %}
-    <span></span>
-    {% endif %}
+<table class="container">
+    <thead>
+    <tr>
+        <th><h1>Книга</h1></th>
+        <th><h1>Оценка</h1></th>
+    </tr>
+    </thead>
+    {% for key, val in sl_marks.items() %}
+    <tr>
+        <th><a href="/book/{{ key }}" style="color: #F0E68C">{{books[key]}}</a></th>
+        <th><a style="color: #F0E68C">
+            <div class="rating-result">
+              {% for i in range(1, 6) %}
+                {% if val >= i %}
+                <span class="active"></span>
+                {% else %}
+                <span></span>
+                {% endif %}
+              {% endfor %}
+            </div>
+        </a></th>
+    </tr>
     {% endfor %}
-</div>
-{% endfor %}
+</table>
 {% endblock %}

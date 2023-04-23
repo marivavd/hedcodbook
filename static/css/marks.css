@@ -33,3 +33,30 @@ h2 {text-align: center;
 	color: gold;
 	text-shadow: 1px 1px #c60;
 }
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-family: 'FontName';
+  font-size: 30px;
+  background: DarkSeaGreen;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: center;
+}
+th {
+  font-weight: normal;
+  color: #037;
+  border-right: 2px solid #6678b1;
+  border-left: 2px solid #6678b1;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+td {
+  color: #669;
+  padding: 9px 8px;
+  border-right: 2px solid #6678b1;
+  border-left: 2x solid #6678b1;
+  transition: .3s linear;
+}
+tr:hover td {
+  color: #6699ff;

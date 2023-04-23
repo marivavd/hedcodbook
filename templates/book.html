@@ -31,7 +31,7 @@
 <form method="post">
   <fieldset>
     <legend style="font-weight: bold">Выбери статус этой книги:</legend>
-    <div style="font-size: 16px; font-weight: bold">
+    <div style="font-size: 16px; font-weight: bold; margin-top: 20px">
       <input class="status" type="radio" id="want_to_read" name="status" value="want_to_read"/>
       <label for="want_to_read">Хочу прочитать</label>
       <input class="status" type="radio" id="reading_now" name="status" value="reading_now"/>
@@ -44,24 +44,29 @@
     </div>
   </fieldset>
 </form>
+<form method="post" action="{{ url_for('send_marks', book_id = book.id)}}">
+    <div style="font-size: 20px; font-weight: bold; margin-top: 20px; margin-bottom: 20px; color: DarkBlue">
+     <input class="mark" type="radio" id="one" name="mark" value="1"/>
+     <label for="one">1</label>
+     <input class="mark" type="radio" id="two" name="mark" value="2"/>
+     <label for="two">2</label>
+     <input class="mark" type="radio" id="three" name="mark" value="3"/>
+     <label for="three">3</label>
+     <input class="mark" type="radio" id="four" name="mark" value="4"/>
+     <label for="four">4</label>
+     <input class="mark" type="radio" id="five" name="mark" value="5"/>
+     <label for="five">5</label>
+     <div>
+       <button type="submit">Оставить оценку</button>
+     </div>
+   </div>
+</form>
 <form method="post" action="{{ url_for('send_reviews', book_id = book.id)}}">
-<center><div class="rating-area">
-	<input type="radio" id="star-5" name="rating" value="5">
-	<label for="star-5" title="Оценка «5»"></label>
-	<input type="radio" id="star-4" name="rating" value="4">
-	<label for="star-4" title="Оценка «4»"></label>
-	<input type="radio" id="star-3" name="rating" value="3">
-	<label for="star-3" title="Оценка «3»"></label>
-	<input type="radio" id="star-2" name="rating" value="2">
-	<label for="star-2" title="Оценка «2»"></label>
-	<input type="radio" id="star-1" name="rating" value="1">
-	<label for="star-1" title="Оценка «1»"></label>
-</div></center>
-<label class="comment" for="msg">Комментарий:</label>
-<textarea id="msg" name="user_message"></textarea>
-<div>
-    <button type="submit">Оставить отзыв</button>
-</div>
+    <label class="comment" for="msg">Комментарий:</label>
+    <textarea id="msg" name="user_message"></textarea>
+    <div>
+        <button type="submit">Оставить отзыв</button>
+    </div>
 </form>
 {% for key, val in sl_reviews.items() %}
 <div class="col-md6 border rounded">

@@ -3,14 +3,18 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="/static/css/reviews.css">
 <h1>Ваши комментарии</h1>
-{% for key, val in sl_reviews.items() %}
-<div class="col-md6 border rounded">
-    <a href="/book/{{ key }}">
-        <h2>Книга: {{books[key]}}</h2>
-    </a>
-    <div>
-        {{val}}
-    </div>
-</div>
-{% endfor %}
+<table class="container">
+    <thead>
+    <tr>
+        <th><h1>Книга</h1></th>
+        <th><h1>Отзыв</h1></th>
+    </tr>
+    </thead>
+    {% for key, val in sl_reviews.items() %}
+    <tr>
+        <th><a href="/book/{{ key }}" style="color: #F0E68C">{{books[key]}}</a></th>
+        <th><a style="color: #F0E68C">{{ val }}</a></th>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
