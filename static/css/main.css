@@ -8,4 +8,16 @@ background-attachment: fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+body {
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
+  padding-bottom: 100px; //height of the footer
+  box-sizing: border-box;
+}
 
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

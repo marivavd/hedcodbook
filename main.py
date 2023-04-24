@@ -1,7 +1,7 @@
 """Модуль для переключения между страницами"""
 from flask import Flask, render_template, redirect, request, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-
+import os
 from forms.user import RegisterForm, LoginForm
 from forms.book import PostForm
 from forms.author import AuthorForm
@@ -72,7 +72,7 @@ def index():
     if not current_user.is_authenticated:
         return render_template('index.html')
 
-    return render_template("home.html", sp_books=get(f'http://127.0.0.1:8000/api/index/'
+    return render_template("home.html", sp_books=get(f'http://127.0.0.1:5000/api/index/'
                                                      f'{request.form.get("book_filter")}_/'
                                                      f'{request.form.get("search")}_').json())
 
@@ -151,7 +151,7 @@ def open_book(book_id):
                 current_user.books[status].append(book_id)
             elif i != status and book_id in current_user.books[i]:
                 current_user.books[i].remove(book_id)
-        put(f'http://127.0.0.1:8000/api/edit_status/{current_user.id}',
+        put(f'http://127.0.0.1:5000/api/edit_status/{current_user.id}',
             json={'books': current_user.books, 'id': current_user.id}).json()
     db_sess = db_session.create_session()
     book = db_sess.query(Library).filter(Library.id == book_id).first()
@@ -209,7 +209,7 @@ def send_marks(book_id):
     if request.method == 'POST':
         mark = request.form['mark']
         current_user.books['marks'][book_id] = int(mark)
-        put(f'http://127.0.0.1:8000/api/comment_mark/{current_user.id}',
+        put(f'http://127.0.0.1:5000/api/comment_mark/{current_user.id}',
             json={'books': current_user.books, 'id': current_user.id}).json()
         db_sess = db_session.create_session()
         book = db_sess.query(Library).filter(Library.id == book_id).first()
@@ -224,12 +224,12 @@ def send_reviews(book_id):
     if request.method == 'POST':
         message = request.form['user_message']
         current_user.books['comments'][int(book_id)] = message
-        put(f'http://127.0.0.1:8000/api/comment_mark/{current_user.id}',
+        put(f'http://127.0.0.1:5000/api/comment_mark/{current_user.id}',
             json={'books': current_user.books, 'id': current_user.id}).json()
         db_sess = db_session.create_session()
         book = db_sess.query(Library).filter(Library.id == book_id).first()
         book.reviews[current_user.nickname] = message
-        put(f'http://127.0.0.1:8000/api/comment_for_book/{book.id}',
+        put(f'http://127.0.0.1:5000/api/comment_for_book/{book.id}',
             json={'reviews': book.reviews, 'id': book.id}).json()
     return redirect(f'/book/{book_id}')
 
@@ -237,4 +237,5 @@ def send_reviews(book_id):
 if __name__ == '__main__':
     db_session.global_init("db/library.db")
     app.register_blueprint(main_api.blueprint)
-    app.run(port=8000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
