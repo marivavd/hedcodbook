@@ -111,7 +111,6 @@ def edit_status(user_id):
 def web_add_book():
     name = request.args.get('author_name')
     surname = request.args.get('author_surname')
-
     if (name == 'Я' and not db.get_author(name, surname)) or name == 'Другое':
         return jsonify({'is_new_author': True})
     else:
@@ -123,7 +122,7 @@ def add_book_in_db(form: dict):
     book = Library(
         name=form.get('name'),
         author_id=db.get_author(form.get('author_name'),
-                                form.get('author_surname')),
+                                form.get('author_surname')).id,
         picture=form.get('picture'),
         genre=form.get('genre'),
         summary=form.get('summary'),
@@ -134,7 +133,7 @@ def add_book_in_db(form: dict):
         link_to_the_screenshot=form.get('link_to_the_screenshot'))
     db_sess = db_session.create_session()
     db_sess.add(book)
-    # db_sess.commit()
+    db_sess.commit()
 
 
 @blueprint.route('/api/add_author', methods=['PUT'])
@@ -144,8 +143,13 @@ def add_author():
         name=form.get('name'),
         surname=form.get('surname'),
         about=form.get('about'),
-        picture=form.get('picture'))
+        picture=f'{form.get("name")}_{form.get("surname")}')
 
     db_sess = db_session.create_session()
     db_sess.add(author)
     db_sess.commit()
+
+    f = request.files['picture']
+    photo_file = open(f'static/img/authors/{form.get("name")}_{form.get("surname")}.png', "wb")
+    photo_file.write(f.read())
+    photo_file.close()
