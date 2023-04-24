@@ -117,6 +117,10 @@ def add_author():
     if db.get_author(*form.get_fullname()):
         return render_template('add_author.html', message="Этот автор уже с нами", form=form)
 
+    f = request.files['picture']
+    photo_file = open(f'static/img/authors/{" ".join(form.get_fullname())}.png', "wb")
+    photo_file.write(f.read())
+
     put('http://127.0.0.1:8000/api/add_author', params=form.get_all())
     return get('http://127.0.0.1:8000/').content.decode('utf-8')
 
@@ -125,7 +129,7 @@ def add_author():
 def add_book():
     form = PostForm()
 
-    if not form.validate_on_submit():
+    if not form.validate_on_submit() or request.method == 'GET':
         return render_template("add_book.html", sp_authors=db.get_sp_authors(), form=form)
     form += request.form.get('comp_select')
 
@@ -136,6 +140,11 @@ def add_book():
 
     is_new_author = get('http://127.0.0.1:8000/api/add_book/',
                         params=form.get_all()).json()['is_new_author']
+
+    f = request.files['picture']
+    photo_file = open(f'static/img/books/{f.filename}', "wb")
+    photo_file.write(f.read())
+
     if is_new_author:
         return get('http://127.0.0.1:8000/add_author').content.decode('utf-8')
     else:

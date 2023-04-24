@@ -131,6 +131,7 @@ def add_book_in_db(form: dict):
         link_to_the_production=form.get('link_to_the_production'),
         link_to_audio=form.get('link_to_audio'),
         link_to_the_screenshot=form.get('link_to_the_screenshot'))
+
     db_sess = db_session.create_session()
     db_sess.add(book)
     db_sess.commit()

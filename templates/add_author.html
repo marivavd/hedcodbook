@@ -3,7 +3,7 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="/static/css/add_book.css">
 <h1 class="main_text">Добавить автора</h1>
-<form action="" method="post" style="width: 60%; margin: auto; display: table">
+<form action="" method="post" style="width: 60%; margin: auto; display: table"  enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <p style="color: #E0FFFF">
         {{ form.name.label }}<br>
