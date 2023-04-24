@@ -11,10 +11,10 @@ class AuthorForm(FlaskForm):
     submit = SubmitField('Добавить')
 
     def get_all(self):
-        return {'name': self.name.data.lower(),
-                'surname': self.surname.data.lower(),
-                'picture': self.picture.data,
+        return {'name': self.name.data,
+                'surname': self.surname.data,
+                'picture': f'/static/img/authors/{"_".join(self.get_fullname())}.png',
                 'about': self.about.data}
 
     def get_fullname(self):
-        return self.name.data.lower(), self.surname.data.lower()
+        return self.name.data, self.surname.data

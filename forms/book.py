@@ -28,7 +28,7 @@ class PostForm(FlaskForm):
         return {'name': self.name.data,
                 'author_name': self.author.split()[0],
                 'author_surname': ' '.join(self.author.split()[1:]),
-                'picture': self.picture.data.filename,
+                'picture': f'/static/img/books/{self.name.data.lower()}.jpg',
                 'genre': self.genre.data,
                 'summary': self.summary.data,
                 'history_of_creation': self.history_of_creation.data,

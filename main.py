@@ -118,11 +118,11 @@ def add_author():
         return render_template('add_author.html', message="Этот автор уже с нами", form=form)
 
     f = request.files['picture']
-    photo_file = open(f'static/img/authors/{" ".join(form.get_fullname())}.png', "wb")
+    photo_file = open(f'static/img/authors/{"_".join(form.get_fullname())}.png', "wb")
     photo_file.write(f.read())
 
-    put('http://127.0.0.1:8000/api/add_author', params=form.get_all())
-    return get('http://127.0.0.1:8000/').content.decode('utf-8')
+    put('http://127.0.0.1:5000/api/add_author', params=form.get_all())
+    return redirect('/')
 
 
 @app.route("/add_book", methods=['POST', 'GET'])
@@ -138,17 +138,17 @@ def add_book():
                                message="Эта книга уже есть в нашей библиотеке",
                                form=form, sp_authors=db.get_sp_authors())
 
-    is_new_author = get('http://127.0.0.1:8000/api/add_book/',
+    is_new_author = get('http://127.0.0.1:5000/api/add_book/',
                         params=form.get_all()).json()['is_new_author']
 
     f = request.files['picture']
-    photo_file = open(f'static/img/books/{f.filename}', "wb")
+    photo_file = open(f'static/img/books/{form.name.data.lower()}.jpg', "wb")
     photo_file.write(f.read())
 
     if is_new_author:
-        return get('http://127.0.0.1:8000/add_author').content.decode('utf-8')
+        return redirect('/add_author')
     else:
-        return get('http://127.0.0.1:8000/').content.decode('utf-8')
+        return redirect('/')
 
 
 @app.route("/book/<int:book_id>", methods=['GET', 'POST'])
@@ -165,7 +165,10 @@ def open_book(book_id):
     db_sess = db_session.create_session()
     book = db_sess.query(Library).filter(Library.id == book_id).first()
     sl_reviews = book.reviews
-    stars = book.summa_marks // book.count_marks
+    if book.count_marks == 0:
+        stars = 0
+    else:
+        stars = book.summa_marks // book.count_marks
     author = db_sess.query(Authors).filter(Authors.id == book.author_id).first()
     return render_template("book.html", book=book, author=author, sl_reviews=sl_reviews, stars=stars)
 
