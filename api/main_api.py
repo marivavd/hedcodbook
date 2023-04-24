@@ -143,8 +143,13 @@ def add_author():
         name=form.get('name'),
         surname=form.get('surname'),
         about=form.get('about'),
-        picture=form.get('picture'))
+        picture=f'{form.get("name")}_{form.get("surname")}')
 
     db_sess = db_session.create_session()
     db_sess.add(author)
     db_sess.commit()
+
+    f = request.files['picture']
+    photo_file = open(f'static/img/authors/{form.get("name")}_{form.get("surname")}.png', "wb")
+    photo_file.write(f.read())
+    photo_file.close()
