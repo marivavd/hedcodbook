@@ -16,12 +16,10 @@ class MyDataBase:
         return self.db_sess.query(User).filter(User.email == email).first()
 
     def get_author(self, name, surname):
-        print([name, surname])
+        # разобраться почему не работает нормальный запрос
         for i in self.db_sess.query(Authors).all():
             if my_str(i.name) == my_str(name) and my_str(i.surname) == my_str(surname):
-                q = i
-        return self.db_sess.query(Authors).filter(my_str(Authors.name) == my_str(name),
-                                                  my_str(Authors.surname) == my_str(surname)).first()
+                return i
 
     def check_book(self, name):
         return self.db_sess.query(Library).filter(my_str(Library.name) == my_str(name)).first()
