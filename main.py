@@ -50,7 +50,7 @@ def register():
         return render_template('register.html', title='Регистрация', form=form,
                                message="Такой пользователь уже есть")
     else:
-        get('http://127.0.0.1:8000/api/register/', params=form.get_public())
+        get('http://127.0.0.1:5000/api/register/', params=form.get_public())
         return redirect('/login')
 
 
